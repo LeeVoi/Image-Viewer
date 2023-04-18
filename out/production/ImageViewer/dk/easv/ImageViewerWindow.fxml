@@ -21,7 +21,7 @@
                   <Button fx:id="btnPrevious" mnemonicParsing="false" onAction="#handleBtnPreviousAction" text="Previous" />
                   <Button fx:id="btnNet" mnemonicParsing="false" onAction="#handleBtnNextAction" text="Next" />
                   <Button fx:id="btnStart" mnemonicParsing="false" onAction="#handleBtnStart" text="Start" />
-                  <Button fx:id="btnEnd" mnemonicParsing="false" onAction="#handleBtnEnd" text="Stop" />
+                  <Button fx:id="btnEnd" mnemonicParsing="false" onAction="#handleBtnStop" text="Stop" />
                     </buttons>
                 </ButtonBar>
             </children>

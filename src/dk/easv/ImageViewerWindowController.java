@@ -9,16 +9,15 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class ImageViewerWindowController
 {
     Timer timer = new Timer();
-    private final List<Image> images = new ArrayList<>();
+    private final List<Image> images = Collections.synchronizedList(new ArrayList<>());
     private int currentImageIndex = 0;
+
+    private SlideshowThread slideshowThread;
 
     @FXML
     Parent root;
@@ -57,16 +56,13 @@ public class ImageViewerWindowController
     }
 
     @FXML
-    private void handleBtnNextAction()
+    public void handleBtnNextAction()
     {
-        if (!images.isEmpty())
-        {
             currentImageIndex = (currentImageIndex + 1) % images.size();
             displayImage();
-        }
     }
 
-    private void displayImage()
+    public void displayImage()
     {
         if (!images.isEmpty())
         {
@@ -74,29 +70,14 @@ public class ImageViewerWindowController
         }
     }
     @FXML
-    public void handleBtnStart() throws InterruptedException {
-        if (!images.isEmpty())
-        {
-            currentImageIndex = (currentImageIndex + 1) % images.size();
-            displayImage();
-        }
-        slideShow();
+    public void handleBtnStart(){
+            slideshowThread = new SlideshowThread();
+            slideshowThread.setImgController(this);
+            slideshowThread.setSlideshowOn(true);
+            slideshowThread.start();
     }
-    @FXML
-    public void handleBtnEnd() throws InterruptedException {
-        timer.wait();
-    }
-    public void slideShow() {
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    try {
-                        handleBtnStart();
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }, 5000);
 
+    public void handleBtnStop(){
+        slideshowThread.setSlideshowOn(false);
     }
 }
