@@ -1,9 +1,5 @@
 package dk.easv;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
@@ -12,8 +8,15 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class ImageViewerWindowController
 {
+    Timer timer = new Timer();
     private final List<Image> images = new ArrayList<>();
     private int currentImageIndex = 0;
 
@@ -69,5 +72,31 @@ public class ImageViewerWindowController
         {
             imageView.setImage(images.get(currentImageIndex));
         }
+    }
+    @FXML
+    public void handleBtnStart() throws InterruptedException {
+        if (!images.isEmpty())
+        {
+            currentImageIndex = (currentImageIndex + 1) % images.size();
+            displayImage();
+        }
+        slideShow();
+    }
+    @FXML
+    public void handleBtnEnd() throws InterruptedException {
+        timer.wait();
+    }
+    public void slideShow() {
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    try {
+                        handleBtnStart();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }, 5000);
+
     }
 }
