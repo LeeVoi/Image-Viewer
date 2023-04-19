@@ -2,6 +2,7 @@ package dk.easv;
 
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
@@ -13,7 +14,6 @@ import java.util.*;
 
 public class ImageViewerWindowController
 {
-    Timer timer = new Timer();
     private final List<Image> images = Collections.synchronizedList(new ArrayList<>());
     private int currentImageIndex = 0;
 
@@ -24,6 +24,8 @@ public class ImageViewerWindowController
 
     @FXML
     private ImageView imageView;
+    @FXML
+    public Label label;
 
     @FXML
     private void handleBtnLoadAction()
@@ -67,6 +69,8 @@ public class ImageViewerWindowController
         if (!images.isEmpty())
         {
             imageView.setImage(images.get(currentImageIndex));
+            String filename = new File(images.get(currentImageIndex).getUrl()).getName();
+            label.setText("Filename:" + " " + filename);
         }
     }
     @FXML
